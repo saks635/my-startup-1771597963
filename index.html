@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthMate - Your AI Wellness Assistant for University Students</title>
+    <meta name="description" content="HealthMate is an AI-powered wellness assistant designed specifically for university students. Get personalized fitness, nutrition, and mindfulness plans to balance studies and health.">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <style>
+        /* Basic Reset & Global Styles */
+        :root {
+            --primary-color: #4A90E2; /* A vibrant blue */
+            --secondary-color: #50E3C2; /* A complementary teal */
+            --text-color: #333;
+            --light-text-color: #666;
+            --background-light: #f8f9fa;
+            --background-dark: #2c3e50;
+            --white: #fff;
+            --border-radius: 8px;
+            --spacing-unit: 1rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Modern sans-serif, fallback to generic */
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--white);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            margin-bottom: var(--spacing-unit);
+            line-height: 1.2;
+        }
+
+        p {
+            margin-bottom: var(--spacing-unit);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 calc(var(--spacing-unit) * 1.5);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #3a7bd5; /* Darker primary */
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--white);
+            padding: 1.2rem 0;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-cta {
+            margin-left: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #6a82fb 100%);
+            color: var(--white);
+            padding: 6rem 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero .btn {
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border-color: var(--white);
+            background-color: var(--white);
+            color: var(--primary-color);
+        }
+
+        .hero .btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .section-light {
+            background-color: var(--background-light);
+        }
+
+        .section-dark {
+            background-color: var(--background-dark);
+            color: var(--white);
+        }
+
+        .section-heading {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+        .section-dark .section-heading {
+             color: var(--white);
+        }
+
+        .section-subheading {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+            color: var(--light-text-color);
+        }
+        .section-dark .section-subheading {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Problem/Solution */
+        .problem-solution-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .problem-solution-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .problem-card, .solution-card {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+        .section-dark .problem-card, .section-dark .solution-card {
+            background-color: #34495e; /* Darker background for cards in dark section */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            color: var(--white);
+        }
+
+        .problem-card:hover, .solution-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .problem-card h3, .solution-card h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .section-dark .problem-card h3, .section-dark .solution-card h3 {
+            color: var(--secondary-color);
+        }
+
+        .problem-card ul, .solution-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .problem-card li, .solution-card li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        .problem-card li::before {
+            content: '❌'; /* Unicode for cross mark */
+            position: absolute;
+            left: 0;
+            color: #e74c3c; /* Red */
+        }
+
+        .solution-card li::before {
+            content: '✅'; /* Unicode for check mark */
+            position: absolute;
+            left: 0;
+            color: #2ecc71; /* Green */
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-item {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section-dark .feature-item {
+            background-color: #34495e;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            color: var(--white);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .section-dark .feature-icon {
+            color: var(--secondary-color);
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+        .section-dark .feature-item h3 {
+            color: var(--white);
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: var(--light-text-color);
+        }
+        .section-dark .feature-item p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            background: linear-gradient(45deg, var(--secondary-color) 0%, #3498db 100%);
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta-section .btn {
+            background-color: var(--white);
+            color: var(--secondary-color);
+            border-color: var(--white);
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+        }
+
+        .cta-section .btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--background-dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 3rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .section-heading {
+                font-size: 2rem;
+            }
+            .nav-links {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            .nav-cta {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            .hero {
+                padding: 4rem 0;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .section {
+                padding: 3rem 0;
+            }
+            .section-heading {
+                font-size: 1.8rem;
+            }
+            .section-subheading {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+            .feature-item {
+                padding: 2rem;
+            }
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+            .cta-section p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero p {
+                font-size: 0.9rem;
+            }
+            .btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .section-heading {
+                font-size: 1.5rem;
+            }
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+            .feature-item h3 {
+                font-size: 1.3rem;
+            }
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">HealthMate</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <a href="pricing.html" class="btn btn-primary nav-cta">Get Started</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Balance Your Books & Your Body: HealthMate, Your AI Wellness Partner for University Life</h1>
+                <p>Struggling to juggle studies and self-care? HealthMate creates personalized fitness, nutrition, and mindfulness plans designed to fit your busy academic schedule, empowering you to thrive.</p>
+                <a href="pricing.html" class="btn btn-primary">Start Your Free Trial Today</a>
+            </div>
+        </section>
+
+        <section class="section section-light">
+            <div class="container">
+                <h2 class="section-heading">The University Grind vs. Your Well-being</h2>
+                <p class="section-subheading">University life is demanding. HealthMate understands the unique challenges students face in maintaining health amidst academic pressure.</p>
+
+                <div class="problem-solution-grid">
+                    <div class="problem-card">
+                        <h3>The Problem</h3>
+                        <ul>
+                            <li><strong>Time Crunch:</strong> No time for gym or meal prep between classes and assignments.</li>
+                            <li><strong>Stress & Burnout:</strong> Academic pressure leads to high stress levels and mental fatigue.</li>
+                            <li><strong>Unhealthy Habits:</strong> Irregular sleep, poor diet, and lack of exercise become the norm.</li>
+                            <li><strong>Lack of Guidance:</strong> Unsure how to start or maintain a healthy routine that fits student life.</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <h3>The HealthMate Solution</h3>
+                        <ul>
+                            <li><strong>Personalized Plans:</strong> AI-powered fitness & nutrition tailored to <em>your</em> schedule.</li>
+                            <li><strong>Holistic Tracking:</strong> Monitor sleep, exercise, stress, and habits effortlessly.</li>
+                            <li><strong>Smart Support:</strong> Guided mindfulness, quick workouts, and energy boosts on demand.</li>
+                            <li><strong>AI-Driven Insights:</strong> Identify patterns and get suggestions to build sustainable routines.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-dark">
+            <div class="container">
+                <h2 class="section-heading">How HealthMate Empowers Your Student Journey</h2>
+                <p class="section-subheading">We combine cutting-edge AI with expert wellness principles to give you a truly personalized and supportive experience.</p>
+
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="feature-icon">🧠</span>
+                        <h3>AI-Powered Personalization</h3>
+                        <p>Get fitness and nutrition plans that adapt to your unique academic timetable and preferences, ensuring they're always achievable.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <h3>Smart Habit Tracking</h3>
+                        <p>Effortlessly track sleep, exercise, stress levels, and more. Understand your patterns to make informed choices for better health.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🧘‍♀️</span>
+                        <h3>Mindfulness & Stress Relief</h3>
+                        <p>Access guided meditation sessions and quick stress-busting exercises to maintain mental clarity and reduce academic anxiety.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <h3>Quick Energy Boosts</h3>
+                        <p>Discover short, effective workouts and nutrition tips designed to re-energize you between study sessions or before exams.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔔</span>
+                        <h3>Intelligent Reminders</h3>
+                        <p>Stay on track with smart notifications for workouts, meals, and mindfulness breaks, perfectly integrated into your day.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📈</span>
+                        <h3>Sustainable Routine Builder</h3>
+                        <p>HealthMate identifies unhealthy patterns and offers AI-driven suggestions to help you build lasting habits for lifelong well-being.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to Transform Your University Experience?</h2>
+                <p>Join thousands of students who are finding their balance with HealthMate. Take control of your well-being and unlock your full potential.</p>
+                <a href="pricing.html" class="btn btn-primary">Download HealthMate Today</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 HealthMate. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="contact.html">Support</a></li>
+            </ul>
+        </div>
+    </footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
